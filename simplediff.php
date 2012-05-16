@@ -19,6 +19,9 @@
 */
 
 function diff($old, $new){
+	if(empty($old)) return array(array('d'=>'', 'i'=>$new));
+	if($old == $new) return array(); 
+	$matrix = array();
 	$maxlen = 0;
 	foreach($old as $oindex => $ovalue){
 		$nkeys = array_keys($new, $ovalue);
