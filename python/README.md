@@ -117,5 +117,4 @@ License
 
 SimpleDiff is copyright 2008-2012 by Paul Butler. It may
 be used and redistributed under a liberal zlib/libpng-like
-license provided in the LICENSE file.
-
+license provided in the `LICENSE` file.
