@@ -1,0 +1,18 @@
+[
+    {
+        "old": ["The", "quick", "brown", "fox"],
+        "new": ["The", "slow", "green", "turtle"],
+        "diff": [["=", ["The"]],
+                 ["-", ["quick", "brown", "fox"]],
+                 ["+", ["slow", "green", "turtle"]]]
+    },
+    {
+        "old": ["jumps", "over", "the", "lazy", "dog"],
+        "new": ["walks", "around", "the", "orange", "cat"],
+        "diff": [["-", ["jumps", "over"]],
+                 ["+", ["walks", "around"]],
+                 ["=", ["the"]],
+                 ["-", ["lazy", "dog"]],
+                 ["+", ["orange", "cat"]]]
+    }
+]
