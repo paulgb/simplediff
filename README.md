@@ -6,11 +6,11 @@ See the Python code for the reference implementation.
 
 The Python version is available through pip:
 
-  pip install simplediff
+    pip install simplediff
 
 The Javascript version is available through npm:
 
-  npm install simplediff
+    npm install simplediff
 
 The PHP and Python code was written by me (Paul Butler) in 2007 and 2008 respectively.
 
