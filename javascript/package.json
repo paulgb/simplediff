@@ -1,0 +1,29 @@
+{
+  "name": "simplediff",
+  "description": "Simple diff algorithm",
+  "version": "0.1.0",
+  "author": "DJ Mountney <github:twk3>",
+  "main": "simplediff",
+  "contributors": [
+    {
+      "name": "Paul Butler <github:paulgb>",
+      "email": "paulgb@gmail.com"
+    }
+  ],
+  "scripts": {
+    "prepublish": "uglifyjs2 simplediff.js -o simplediff.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulgb/simplediff.git"
+  },
+  "keywords": [
+    "diff"
+  ],
+  "devDependencies": {
+    "uglify-js2": "*"
+  },
+  "license": "zlib/libpng license"
+}
+  
+
