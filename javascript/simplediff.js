@@ -210,10 +210,6 @@ var checkDiff = function(before, after) {
     before  = [before];
     after   = [after];
 
-    if (typeof(console) == 'undefined') {
-      console = window.console || {assert: function(){}}
-    }
-
     var result  = diff(before, after),
         _before = [],
         _after  = [], i;
