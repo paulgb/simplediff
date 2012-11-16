@@ -1,7 +1,7 @@
 {
   "name": "simplediff",
   "description": "Simple diff algorithm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "DJ Mountney <github:twk3>",
   "main": "simplediff",
   "contributors": [
