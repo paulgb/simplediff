@@ -25,7 +25,7 @@ def diff(old, new):
         old     the old list of immutable, comparable values (ie. a list
                 of strings)
         new     the new list of immutable, comparable values
-   
+
     Returns:
         A list of pairs, with the first part of the pair being one of three
         strings ('-', '+', '=') and the second part being a list of values from
@@ -55,11 +55,11 @@ def diff(old, new):
     # Create a map from old values to their indices
     old_index_map = dict()
     for i, val in enumerate(old):
-        old_index_map.setdefault(val,list()).append(i)
+        old_index_map.setdefault(val, list()).append(i)
 
     # Find the largest substring common to old and new.
     # We use a dynamic programming approach here.
-    # 
+    #
     # We iterate over each value in the `new` list, calling the
     # index `inew`. At each iteration, `overlap[i]` is the
     # length of the largest suffix of `old[:i]` equal to a suffix
@@ -86,7 +86,7 @@ def diff(old, new):
 
     for inew, val in enumerate(new):
         _overlap = dict()
-        for iold in old_index_map.get(val,list()):
+        for iold in old_index_map.get(val, list()):
             # now we are considering all values of iold such that
             # `old[iold] == new[inew]`.
             _overlap[iold] = (iold and overlap.get(iold - 1, 0)) + 1
@@ -104,10 +104,10 @@ def diff(old, new):
     else:
         # ...otherwise, the common substring is unchanged and we recursively
         # diff the text before and after that substring
-        return diff(old[ : sub_start_old], new[ : sub_start_new]) + \
-               [('=', new[sub_start_new : sub_start_new + sub_length])] + \
-               diff(old[sub_start_old + sub_length : ],
-                       new[sub_start_new + sub_length : ])
+        return diff(old[: sub_start_old], new[: sub_start_new]) + \
+            [('=', new[sub_start_new: sub_start_new + sub_length])] + \
+            diff(old[sub_start_old + sub_length:],
+                 new[sub_start_new + sub_length:])
 
 
 def string_diff(old, new):
@@ -195,4 +195,3 @@ def check_diff(old, new):
     assert old == _old, 'Expected %s, got %s' % (old, _old)
     _new = [val for (a, vals) in result if (a in '=+') for val in vals]
     assert new == _new, 'Expected %s, got %s' % (new, _new)
-
