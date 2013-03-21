@@ -1,0 +1,13 @@
+[
+    {
+        "old": "The quick brown fox.",
+        "new": "The kuick brown fix.",
+        "diff": [["=", "The "],
+                 ["-", "q"],
+                 ["+", "k"],
+                 ["=", "uick brown f"],
+                 ["-", "o"],
+                 ["+", "i"],
+                 ["=", "x."]]
+    }
+]
