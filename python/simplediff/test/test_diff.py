@@ -1,6 +1,6 @@
 import unittest
 import json
-from simplediff import diff, html_diff, check_diff
+from simplediff import diff, html_diff, check_diff, character_diff
 import sys
 
 
@@ -20,6 +20,10 @@ class DiffTests(unittest.TestCase):
         for check in strings:
             self.assertEqual(diff(check['old'], check['new']), check['diff'])
 
+    def test_character_diff(self):
+        strings = TESTS['character']
+        for check in strings:
+            self.assertEqual(character_diff(check['old'], check['new']), check['diff'])
 
 if __name__ == '__main__':
     unittest.main()
@@ -109,6 +113,19 @@ TESTS = {
                      ("=", ["the"]),
                      ("-", ["lazy", "dog"]),
                      ("+", ["orange", "cat"])]
+        }
+    ],
+    'character': [
+        {
+            "old": "The quick brown fox.",
+            "new": "The kuick brown fix.",
+            "diff": [("=", "The "),
+                     ("-", "q"),
+                     ("+", "k"),
+                     ("=", "uick brown f"),
+                     ("-", "o"),
+                     ("+", "i"),
+                     ("=", "x.")]
         }
     ]
 }

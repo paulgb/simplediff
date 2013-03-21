@@ -10,7 +10,7 @@ May be used and distributed under the zlib/libpng license
 <http://www.opensource.org/licenses/zlib-license.php>
 '''
 
-__all__ = ['diff', 'string_diff', 'html_diff']
+__all__ = ['diff', 'character_diff', 'string_diff', 'html_diff']
 __version__ = '1.0'
 
 
@@ -110,6 +110,111 @@ def diff(old, new):
                  new[sub_start_new + sub_length:])
 
 
+def character_diff(old, new):
+    '''
+    Find the differences between two lists. Returns a list of pairs, where the
+    first value is in ['+','-','='] and represents an insertion, deletion, or
+    no change for that list. The second value of the pair is the string.
+
+    Params:
+        old     the old list of immutable, comparable values (ie. a list
+                of strings)
+        new     the new list of immutable, comparable values
+
+    Returns:
+        A list of pairs, with the first part of the pair being one of three
+        strings ('-', '+', '=') and the second part being a string from
+        the original old and/or new lists. The first part of the pair
+        corresponds to whether the list of values is a deletion, insertion, or
+        unchanged, respectively.
+
+    Examples:
+        >>> character_diff(['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'])
+        [('=', 'a'), ('-', 'b'), ('=', 'c'), ('+', 'b'), ('=', 'd')]
+
+        >>> character_diff(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'e'])
+        [('=', 'abc'), ('-', 'd'), ('+', 'e')]
+
+        >>> character_diff(list('The quick brown fox jumps over the lazy dog'),
+        ...      list('The slow blue cheese drips over the lazy carrot'))
+        ... # doctest: +NORMALIZE_WHITESPACE
+        [('=', 'The '),
+         ('-', 'quick br'),
+         ('+', 'sl'),
+         ('=', 'ow'),
+         ('-', 'n'),
+         ('=', ' '),
+         ('-', 'fox j'),
+         ('+', 'bl'),
+         ('=', 'u'),
+         ('-', 'm'),
+         ('+', 'e cheese dri'),
+         ('=', 'ps over the lazy '),
+         ('-', 'd'),
+         ('+', 'carr'),
+         ('=', 'o'),
+         ('-', 'g'),
+         ('+', 't')]
+    '''
+
+    # Create a map from old values to their indices
+    old_index_map = dict()
+    for i, val in enumerate(old):
+        old_index_map.setdefault(val, list()).append(i)
+
+    # Find the largest substring common to old and new.
+    # We use a dynamic programming approach here.
+    #
+    # We iterate over each value in the `new` list, calling the
+    # index `inew`. At each iteration, `overlap[i]` is the
+    # length of the largest suffix of `old[:i]` equal to a suffix
+    # of `new[:inew]` (or unset when `old[i]` != `new[inew]`).
+    #
+    # At each stage of iteration, the new `overlap` (called
+    # `_overlap` until the original `overlap` is no longer needed)
+    # is built from the old one.
+    #
+    # If the length of overlap exceeds the largest substring
+    # seen so far (`sub_length`), we update the largest substring
+    # to the overlapping strings.
+
+    overlap = dict()
+    # `sub_start_old` is the index of the beginning of the largest overlapping
+    # substring in the old list. `sub_start_new` is the index of the beginning
+    # of the same substring in the new list. `sub_length` is the length that
+    # overlaps in both.
+    # These track the largest overlapping substring seen so far, so naturally
+    # we start with a 0-length substring.
+    sub_start_old = 0
+    sub_start_new = 0
+    sub_length = 0
+
+    for inew, val in enumerate(new):
+        _overlap = dict()
+        for iold in old_index_map.get(val, list()):
+            # now we are considering all values of iold such that
+            # `old[iold] == new[inew]`.
+            _overlap[iold] = (iold and overlap.get(iold - 1, 0)) + 1
+            if(_overlap[iold] > sub_length):
+                # this is the largest substring seen so far, so store its
+                # indices
+                sub_length = _overlap[iold]
+                sub_start_old = iold - sub_length + 1
+                sub_start_new = inew - sub_length + 1
+        overlap = _overlap
+
+    if sub_length == 0:
+        # If no common substring is found, we return an insert and delete...
+        return (old and [('-', "".join(old))] or []) + (new and [('+', "".join(new))] or [])
+    else:
+        # ...otherwise, the common substring is unchanged and we recursively
+        # diff the text before and after that substring
+        return character_diff(old[: sub_start_old], new[: sub_start_new]) + \
+            [('=', "".join(new[sub_start_new: sub_start_new + sub_length]))] + \
+            character_diff(old[sub_start_old + sub_length:],
+                           new[sub_start_new + sub_length:])
+
+
 def string_diff(old, new):
     '''
     Returns the difference between the old and new strings when split on
@@ -139,6 +244,35 @@ def string_diff(old, new):
     return diff(old.split(), new.split())
 
 
+def character_string_diff(old, new):
+    '''
+    Returns the difference between the old and new strings when split on
+    character.
+
+    This function is intended as an example; you'll probably want
+    a more sophisticated wrapper in practice.
+
+    Params:
+        old     the old string
+        new     the new string
+
+    Returns:
+        the output of `character_diff` on the two strings after splitting them
+        by character (a list of change instructions; see the docstring
+        of `character_diff`)
+
+    Examples:
+        >>> characger_string_diff('The quick brown fox', 'The fast blue fox')
+        ... # doctest: +NORMALIZE_WHITESPACE
+        [('=', 'The'),
+         ('-', 'quick brown'),
+         ('+', 'fast blue'),
+         ('=', 'fox')]
+
+    '''
+    return character_diff(list(old), list(new))
+
+
 def html_diff(old, new):
     '''
     Returns the difference between two strings (as in stringDiff) in
@@ -164,6 +298,33 @@ def html_diff(old, new):
            '+': (lambda x: "<ins>" + x + "</ins>"),
            '-': (lambda x: "<del>" + x + "</del>")}
     return " ".join([(con[a])(" ".join(b)) for a, b in string_diff(old, new)])
+
+
+def character_html_diff(old, new):
+    '''
+    Returns the difference between two strings (as in stringDiff) in
+    HTML format. HTML code in the strings is NOT escaped, so you
+    will get weird results if the strings contain HTML.
+
+    This function is intended as an example; you'll probably want
+    a more sophisticated wrapper in practice.
+
+    Params:
+        old     the old string
+        new     the new string
+
+    Returns:
+        the output of the diff expressed with HTML <ins> and <del>
+        tags.
+
+    Examples:
+        >>> html_diff('The quick brown fox', 'The fast blue fox')
+        'The <del>quick brown</del> <ins>fast blue</ins> fox'
+    '''
+    con = {'=': (lambda x: x),
+           '+': (lambda x: "<ins>" + x + "</ins>"),
+           '-': (lambda x: "<del>" + x + "</del>")}
+    return "".join([(con[a])("".join(b)) for a, b in character_string_diff(old, new)])
 
 
 def check_diff(old, new):
