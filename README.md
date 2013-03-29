@@ -20,6 +20,8 @@ The JavaScript port was contributed by DJ Mountney (2012).
 
 Python unit tests contributed by Felipe (fmartingr), 2013.
 
+PHP fix contributed by multiwebinc, 2013.
+
 For more details, see the [Python readme](simplediff/tree/master/python)
 
 1. [Pattern Matching: The Gestalt Approach](http://collaboration.cmc.ec.gc.ca/science/rpn/biblio/ddj/Website/articles/DDJ/1988/8807/8807c/8807c.htm)
