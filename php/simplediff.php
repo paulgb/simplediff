@@ -42,7 +42,7 @@ function diff($old, $new){
 
 function htmlDiff($old, $new){
 	$ret = '';
-	$diff = $this->_diff(preg_split("/[\s,]+/", $old), preg_split("/[\s,]+/", $new));
+	$diff = diff(preg_split("/[\s,]+/", $old), preg_split("/[\s,]+/", $new));
 	foreach($diff as $k){
 		if(is_array($k))
 			$ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
