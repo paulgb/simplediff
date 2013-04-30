@@ -19,7 +19,7 @@
 */
 
 function diff($old, $new){
-    $matrix = array();
+    	$matrix = array();
 	$maxlen = 0;
 	foreach($old as $oindex => $ovalue){
 		$nkeys = array_keys($new, $ovalue);
