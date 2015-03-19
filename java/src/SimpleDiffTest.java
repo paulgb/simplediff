@@ -13,6 +13,18 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class SimpleDiffTest {
 
+	static String diffDataStringOld = "The quick brown fox.";
+	static String diffDataStringNew = "The kuick brown fix.";
+    static String[][] diffDataStringExpected = {
+    		{ "=", "The " },
+    		{ "-", "q" },
+            { "+", "k" },
+            { "=", "uick brown f" },
+            { "-", "o" },
+            { "+", "i" },
+            { "=", "x." },
+	};
+	
 	@Test
 	public void testListCharToString() {
 		Character[] listChar = { 't', 'o', 't', 'o' };
@@ -21,23 +33,11 @@ public class SimpleDiffTest {
 	
 	@Test
 	public void testDiffString() {
-        String olds = "The quick brown fox.";
-        String news = "The kuick brown fix.";
-        String[][] expectedArray = {
-        		{ "=", "The " },
-        		{ "-", "q" },
-                { "+", "k" },
-                { "=", "uick brown f" },
-                { "-", "o" },
-                { "+", "i" },
-                { "=", "x." },
-		};
-        
 		List< Map.Entry<SimpleDiff.DiffOp, String > > ret;
 		List< Map.Entry<SimpleDiff.DiffOp, String > > expected;
-		ret = SimpleDiff.diffString(olds, news);
+		ret = SimpleDiff.diffString(diffDataStringOld, diffDataStringNew);
 		
-		expected = Arrays.asList( expectedArray ).stream()
+		expected = Arrays.asList( diffDataStringExpected ).stream()
 			.map(ar -> new AbstractMap.SimpleEntry<SimpleDiff.DiffOp, String>(
 					SimpleDiff.DiffOp.fromString(ar[0]), ar[1]) )
 			.collect(Collectors.toList());
