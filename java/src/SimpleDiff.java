@@ -45,11 +45,11 @@ public class SimpleDiff {
 		}
 	}
 	
-	static public List< Map.Entry<DiffOp, List<Character> > > 
-		diff( List<Character> olds, List<Character> news ) {
+	static public <E> List< Map.Entry<DiffOp, List<E> > > 
+		diff( List<E> olds, List<E> news ) {
 		//System.out.printf("diff \"%s\" vs \"%s\"%n", olds, news );
 	    // Create a map from old values to their indices
-	    Map< Character, List<Integer> > oldIndexMap = new HashMap<>();
+	    Map< E, List<Integer> > oldIndexMap = new HashMap<>();
 		for( int i=0; i<olds.size(); i++) {
 			List<Integer> indexList = oldIndexMap.getOrDefault(olds.get(i), new ArrayList<Integer>());
 			indexList.add(i);
@@ -74,9 +74,9 @@ public class SimpleDiff {
 	    // seen so far (`sub_length`), we update the largest substring
 	    // to the overlapping strings.
 		
-		// `sub_start_old` is the index of the beginning of the largest overlapping
-		// substring in the old list. `sub_start_new` is the index of the beginning
-		// of the same substring in the new list. `sub_length` is the length that
+		// `subStartOld` is the index of the beginning of the largest overlapping
+		// substring in the old list. `subStartNew` is the index of the beginning
+		// of the same substring in the new list. `subLength` is the length that
 		// overlaps in both.
 		
 		// These track the largest overlapping substring seen so far, so naturally
@@ -88,7 +88,7 @@ public class SimpleDiff {
 		
 		for( int inew=0; inew<news.size(); inew++) {
 			_overlap = new HashMap<>();
-			Character val=news.get(inew);
+			E val=news.get(inew);
 			for( Integer iold : oldIndexMap.getOrDefault(val, new ArrayList<Integer>()) ) {
 				// now we are considering all values of iold such that
 	            // `old[iold] == new[inew]`.
@@ -110,7 +110,7 @@ public class SimpleDiff {
 			//System.out.printf("inew=%d %s%n", inew, overlap);
 		}
 		
-		List< Map.Entry<DiffOp, List<Character> > > ret = new ArrayList<>();
+		List< Map.Entry<DiffOp, List<E> > > ret = new ArrayList<>();
 		if (subLength==0) {
 			// no common substring found
 			if (olds.size() > 0) {
