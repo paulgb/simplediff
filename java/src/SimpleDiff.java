@@ -26,6 +26,21 @@ public class SimpleDiff {
 		static public DiffOp fromString( String s ) {
 			return fromChar( s.charAt(0));
 		}
+
+		static public DiffOp fromInt( int i ) {
+			switch( i ) {
+			case 0:
+				return ADD;
+			case 1:
+				return DEL;
+			case 2:
+				return EQ;
+			}
+			
+			return EQ;
+		}
+		
+
 		
 		static public DiffOp fromChar( char c ) {
 			switch( c ) {
