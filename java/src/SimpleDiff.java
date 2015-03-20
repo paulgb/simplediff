@@ -1,17 +1,26 @@
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class SimpleDiff {
 	public static void main(String[] args) {
-		List< Map.Entry<DiffOp, String > > ret;
-		ret = diffString("tito", "toto");
-		System.out.println(ret);
+		System.out.println( diffString("tito", "toto") );
+		System.out.println( diff( Arrays.asList( 
+				"line1: if (titi) {",
+				"line2:      toto();",
+				"line3: }"
+				), Arrays.asList(
+						"line1: if (titi && tutu) {",
+						"line2:      toto();",
+						"line3: }"
+		)));
+		
+		
 	}
 	
 	static public enum DiffOp {
