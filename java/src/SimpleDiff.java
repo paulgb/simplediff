@@ -1,4 +1,11 @@
+/*
+(C) Paul Butler 2008-2012 <http://www.paulbutler.org/>
+May be used and distributed under the zlib/libpng license
+<http://www.opensource.org/licenses/zlib-license.php>
 
+Java implementation by Philippe Fremy, Copyright 2015
+
+*/
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +76,7 @@ public class SimpleDiff {
 		}
 	}
 	
+	/** Return the differences between two generic lists */
 	static public <E> List< Map.Entry<DiffOp, List<E> > > 
 		diff( List<E> olds, List<E> news ) {
 		//System.out.printf("diff \"%s\" vs \"%s\"%n", olds, news );
@@ -160,6 +168,7 @@ public class SimpleDiff {
 		return builder.toString();
 	}
 	
+	/** Return the difference between two strings */
 	static public List< Map.Entry<DiffOp, String > > diffString( String olds, String news ) {
 		List<Character> oldList = new ArrayList<>();
 		List<Character> newList = new ArrayList<>();
