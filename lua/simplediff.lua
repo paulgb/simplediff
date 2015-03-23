@@ -1,3 +1,12 @@
+--[[
+(C) Paul Butler 2008-2012 <http://www.paulbutler.org/>
+May be used and distributed under the zlib/libpng license
+<http://www.opensource.org/licenses/zlib-license.php>
+
+Adaptation to Lua by Philippe Fremy <phil at freehackers dot org>
+Lua version copyright 2015
+]]
+
 local M={}
 
 function M.table_join( t1, t2, t3 )
@@ -35,9 +44,8 @@ function M.table_subtable( t, start, stop )
 end
 
 function M.diff(old, new)
-    -- print('diff('..mytostring(old)..', '..mytostring(new)..')' )
     --[[
-    Find the differences between two lists. Returns a list of pairs, where the
+    Find the differences between two lists or strings. Returns a list of pairs, where the
     first value is in ['+','-','='] and represents an insertion, deletion, or
     no change for that list. The second value of the pair is the list
     of elements.
@@ -55,14 +63,14 @@ function M.diff(old, new)
         unchanged, respectively.
 
     Examples:
-        >>> diff([1,2,3,4],[1,3,4])
-        { {'=', {1} }, {'-', {2} }, {'=', {3, 4}}}
+        >>> diff( {1,2,3,4}, {1,3,4})
+        { {'=', {1} }, {'-', {2} }, {'=', {3, 4}} }
 
-        >>> diff{{1,2,3,4},{2,3,4,1}}
-        {{'-', {1}}, {'=', {2, 3, 4}}, {'+', {1}}}
+        >>> diff( {1,2,3,4}, {2,3,4,1} )
+        { {'-', {1}}, {'=', {2, 3, 4}}, {'+', {1}} }
 
-        >>> diff('The quick brown fox jumps over the lazy dog'.split(),
-        ...      'The slow blue cheese drips over the lazy carrot'.split())
+        >>> diff( { 'The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog' },
+        ...       { 'The', 'slow', 'blue', 'cheese', 'drips', 'over', 'the', 'lazy', 'carrot' })
         { {'=', {'The'} },
           {'-', {'quick', 'brown', 'fox', 'jumps'} },
           {'+', {'slow', 'blue', 'cheese', 'drips'} },
@@ -73,6 +81,7 @@ function M.diff(old, new)
 
     ]]
 
+    -- print('diff('..mytostring(old)..', '..mytostring(new)..')' )
     -- Create a map from old values to their indices
     local old_index_map = {}
     for i, val in ipairs(old) do
