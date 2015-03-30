@@ -86,7 +86,7 @@ var diff = function(before, after) {
             var iold        = oldIndexMap[after[inew]][i];
             // now we are considering all values of val such that
             // `before[iold] == after[inew]`
-            _overlap[iold]  = ((iold && overlap[iold-1]) || 0) + 1;
+            _overlap[iold]  = (overlap[iold-1] || 0) + 1;
             if (_overlap[iold] > subLength) {
                 // this is the largest substring seen so far, so store its
                 // indices
