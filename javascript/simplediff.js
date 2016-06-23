@@ -49,7 +49,19 @@ var diff = function(before, after) {
     */
 
     // Create a map from before values to their indices
-    var oldIndexMap = {}, i;
+    // polyfill for IE8
+    if (!Object.create) {
+      Object.create = function (o) {
+        function F() {}
+        F.prototype = o;
+        f = new F();
+        f.constructor = o;
+        return f;
+      };
+    }
+    // use Object.create(null) instead of {}, 
+    // otherwise an error occurs if before[i] === 'constructor' or Object.prototype's property.
+    var oldIndexMap = Object.create(null), i;
     for (i = 0; i < before.length; i ++) {
         oldIndexMap[before[i]] = oldIndexMap[before[i]] || [];
         oldIndexMap[before[i]].push(i);
