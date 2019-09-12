@@ -1,13 +1,13 @@
 class SimpleDiff {
-  
+
   enum DiffType<T> {
     case insert([T])
     case delete([T])
     case equal([T])
   }
-  
+
   func diff<T>(_ old: [T], with new: [T]) -> [DiffType<T>] where T: Hashable {
-    
+
     // Create a map from old values to their indices
     var oldIndexMap = [T: [Int]]()
     for (i, val) in old.enumerated() {
@@ -15,11 +15,11 @@ class SimpleDiff {
       indexes.append(i)
       oldIndexMap[val] = indexes
     }
-    
+
     var subStartOld = 0
     var subStartNew = 0
     var subLength = 0
-    
+
     let overlap = [Int: Int]()
     for (iNew, val) in new.enumerated() {
       for iOld in oldIndexMap[val] ?? [] {
@@ -31,7 +31,7 @@ class SimpleDiff {
         }
       }
     }
-    
+
     if subLength == 0 {
       return (old.count > 0 ? [.delete(old)] : []) + (new.count > 0 ? [.insert(new)] : [])
     } else {
@@ -42,12 +42,12 @@ class SimpleDiff {
       return _diffs
     }
   }
- 
+
 }
 
 
 extension SimpleDiff.DiffType:CustomStringConvertible where T == String {
-  
+
   var description: String {
     switch self {
     case .insert(let values):
@@ -63,6 +63,10 @@ extension SimpleDiff.DiffType:CustomStringConvertible where T == String {
 let simpleDiff = SimpleDiff()
 let old = "hello world!"
 let new = "hi world?"
+print("OLD:")
+print(old)
+print("\nNEW:")
+print(new)
 
 let result = simpleDiff.diff(old.map { "\($0)" }, with: new.map { "\($0)" })
   .reduce("", { (result, acc) -> String in
@@ -70,3 +74,5 @@ let result = simpleDiff.diff(old.map { "\($0)" }, with: new.map { "\($0)" })
 })
 
 assert(result == "=h-ello+i= =w=o=r=l=d-!+?")
+print("\nRESULT:")
+print(result)
