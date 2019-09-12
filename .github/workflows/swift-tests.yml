@@ -1,0 +1,15 @@
+name: swift-tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: SimpleDiff Swift
+      run: |
+        set -eo pipefail
+        swift swift/SimpleDiff.swift
