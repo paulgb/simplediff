@@ -20,16 +20,19 @@ class SimpleDiff {
     var subStartNew = 0
     var subLength = 0
 
-    let overlap = [Int: Int]()
+    var overlap:[Int: Int] = [:]
     for (iNew, val) in new.enumerated() {
+	  var _overlap:[Int: Int] = [:]
+	
       for iOld in oldIndexMap[val] ?? [] {
-        let _subLength = (overlap[iOld - 1] ?? 0) + 1
-        if _subLength > subLength {
-          subLength = _subLength
+        _overlap[iOld] = (overlap[iOld - 1] ?? 0) + 1
+        if _overlap[iOld]! > subLength {
+          subLength = _overlap[iOld]!
           subStartOld = iOld - subLength + 1
           subStartNew = iNew - subLength + 1
         }
       }
+	  overlap = _overlap
     }
 
     if subLength == 0 {
@@ -42,9 +45,7 @@ class SimpleDiff {
       return _diffs
     }
   }
-
 }
-
 
 extension SimpleDiff.DiffType:CustomStringConvertible where T == String {
 
@@ -73,6 +74,6 @@ let result = simpleDiff.diff(old.map { "\($0)" }, with: new.map { "\($0)" })
   return result + acc.description
 })
 
-assert(result == "=h-ello+i= =w=o=r=l=d-!+?")
+assert(result == "=h-ello+i= world-!+?")
 print("\nRESULT:")
 print(result)
