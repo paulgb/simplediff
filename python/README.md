@@ -66,7 +66,7 @@ case:
      ('-', 'bbb')]
 
 Note that although 'bbb' is contained in both strings, it is
-an insertation and then a deletion in the resulting diff.
+an insertion and then a deletion in the resulting diff.
 Note also that it was the longer string, 'aaaa', that was
 chosen as unchanged; SimpleDiff tries to maximize the
 length of the unchanged data and minimize the number of
