@@ -51,7 +51,8 @@ var diff = function(before, after) {
     // Create a map from before values to their indices
     var oldIndexMap = {}, i;
     for (i = 0; i < before.length; i ++) {
-        oldIndexMap[before[i]] = oldIndexMap[before[i]] || [];
+        // use hasOwnProperty to prevent oldIndexMap to refer inherited Object.prototype's property (ex. constructor)
+        oldIndexMap[before[i]] = oldIndexMap.hasOwnProperty(before[i]) ? oldIndexMap[before[i]] : [];
         oldIndexMap[before[i]].push(i);
     }
 
