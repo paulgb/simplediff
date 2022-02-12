@@ -1,7 +1,7 @@
 <?php
-
 /*
     Paul's Simple Diff Algorithm v 0.1
+    https://github.com/paulgb/simplediff
     (C) Paul Butler 2007 <http://www.paulbutler.org/>
     May be used and distributed under the zlib/libpng license.
     
@@ -42,7 +42,11 @@ function diff($old, $new){
 
 function htmlDiff($old, $new){
     $ret = '';
-    $diff = diff(preg_split("/[\s]+/", $old), preg_split("/[\s]+/", $new));
+    if (!is_array($old))
+        $old = preg_split("/[\s]+/", $old);
+    if (!is_array($new))
+        $new = preg_split("/[\s]+/", $new);    
+    $diff = diff($old, $new);
     foreach($diff as $k){
         if(is_array($k))
             $ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
